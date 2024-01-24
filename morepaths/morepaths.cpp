@@ -3,16 +3,43 @@
 using namespace std;
 
 vector<vector<int>> grid;
-vector<pair<int>> intersection; // stores intersections where up and left have the same value
 
-int solve(int y, int x, int k) {
-	if(y < 0 or x < 0) {
+int min_custom(int a, int b) {
+	if(a < 0 && b < 0) {
 		return 0;
 	}
+	if(a < 0 && b >= 0 || a > b) {
+		return b;
+	}
+//	if(b < 0 && a >= 0 || a < b) {
+//		return a;
+//	}
+	return a;
+}
+
+int max_custom(int a, int b) {
+	if(a < 0 && b < 0) {
+		return 0;
+	}
+	if(a < 0 && b >= 0 || b > a) {
+		return b;
+	}
+//	if(b < 0 && a >= 0 || a > b) {
+//		return a;
+//	}
+	return a;
+}
+
+int solve(int y, int x, int k) {
+	// cout << y << " " << x << "\n";
+	if(y < 0 || x < 0) {
+		return -1;
+	}
 	if(k > 0) {
-		return min(solve(y - 1, x, k - 1), solve(y, x - 1, k - 1)) + grid[y][x];
+		cout << "k: " << k << " (" << grid[y][x] << ")\n";
+		return min_custom(solve(y - 1, x, k - 1), solve(y, x - 1, k - 1)) + grid[y][x];
 	} 
-	return max(solve(y - 1, x, k), solve(y, x - 1, k)) + grid[y][x];
+	return max_custom(solve(y - 1, x, k - 1), solve(y, x - 1, k - 1)) + grid[y][x];
 }
 
 int main() {
